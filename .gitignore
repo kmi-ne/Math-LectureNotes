@@ -1,0 +1,11 @@
+*
+!*/
+!*.bib
+!.gitattributes
+!.gitignore
+!.latexmkrc
+!*.md
+!*.pdf
+!*.py
+!*.sty
+!*.tex
