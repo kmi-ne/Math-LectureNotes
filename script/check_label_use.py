@@ -21,17 +21,15 @@ for dirpath, dirnames, filenames in os.walk(os.getcwd()):
         file_path = os.path.join(dirpath, filename)
         file_paths.append(file_path)
 
-# 空でない行（ラベル）に一致する文字列が file_paths 内のファイルにあるか確認
+# ラベルに一致する文字列が file_paths 内のファイルにあるか確認
 bool_no_used_label = True
-for line in labels:
-    if line:
-        label = line
-        for file in file_paths:
-            with open(file, encoding="utf-8") as f:
-                file_content = f.read()
-                if label in file_content:
-                    print(f"ラベル{label}は使用済みです．")
-                    bool_no_used_label = False
+for label in labels:
+    for file in file_paths:
+        with open(file, encoding="utf-8") as f:
+            file_content = f.read()
+            if label in file_content:
+                print(f"ラベル{label}は使用済みです．")
+                bool_no_used_label = False
 
 if bool_no_used_label:
     print("安全です．")
