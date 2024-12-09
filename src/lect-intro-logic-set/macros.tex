@@ -1,0 +1,5 @@
+% 数式クラスとオペレーター
+\NewDocumentCommand{\opr}{sm}{\IfBooleanTF{#1}{\operatorname{#2}}{\operatorname*{#2}}}
+\newcommand{\Opr}[1]{\operatorname{\symsfup{#1}}}
+
+\newcommand{\ar}{\opr{ar}}

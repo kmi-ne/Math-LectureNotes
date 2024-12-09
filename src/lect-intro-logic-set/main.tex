@@ -1,0 +1,72 @@
+\documentclass[lualatex, ja=standard, base=10pt, b5j, twoside, label-section=none]{bxjsreport}
+\newcommand{\mysetnewbool}[2]{\expandafter\newif\csname if#1\endcsname \csname #1#2\endcsname}
+
+
+% + + + スイッチ + + +
+\mysetnewbool{BoolUseDraft}{true}% 編集者向けドラフト出力をするか（ラベル表示・余白変更・ウォーターマーク）
+\mysetnewbool{BoolShowIndex}{false}% 索引を出力するか
+\mysetnewbool{BoolShowGls}{false}% 記号一覧を出力するか
+\mysetnewbool{BoolShowBib}{false}% 参考文献を出力するか
+% + + + + + + + +
+
+
+% スタイル
+\input{../settings.tex}
+\input{macros.tex}
+
+
+% + + + タイトル + + +
+\title{\gs\huge 数学の基礎\ 講義ノート}
+\author{鴎海}
+\date{\normalsize 最終更新日：\today}
+% + + + + + + + +
+
+\begin{document}
+
+\pagestyle{myps}
+
+% タイトルページ
+\pagenumbering{roman}
+\maketitle
+
+
+% ===== ドキュメント構成 =====
+% まえがき
+% 目次
+% 本編
+% 参考文献
+% 索引
+% 記号一覧
+% ============================
+
+
+% 引用
+\input{sub/quotepage.tex}
+
+
+% まえがき
+\input{sub/intro.tex}
+
+
+% 目次
+\tableofcontents
+\cleardoublepage
+
+
+% + + + 本編 + + +
+\pagenumbering{arabic}
+
+\part{論理学}
+
+\input{sub/logic/01.tex}
+% + + + + + + + +
+
+% 参考文献
+
+% 索引
+\printindex
+
+% 記号一覧
+% \myprintglossary
+
+\end{document}
