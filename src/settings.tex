@@ -1,21 +1,44 @@
-%%%%% 真理値と条件分岐
-\newcommand{\mysetbool}[2]{\csname #1#2\endcsname}
-\mysetnewbool{BoolIfChapNumbered}{false}
-\mysetnewbool{BoolIfSecNumbered}{false}
-\mysetnewbool{BoolIfSecExist}{false}
-\newcommand{\myboolTF}[3]{\csname if#1\endcsname #2 \else #3 \fi}
-\newcommand{\myboolT}[2]{\csname if#1\endcsname #2 \else \fi}
-\newcommand{\myboolF}[2]{\csname if#1\endcsname \else #2 \fi}
+\makeatletter
+
+%%%%% \section{真理値と条件分岐}
+\usepackage{ifthen}
+\NewDocumentCommand{\SetBool}{m !t+ !t-}{
+  \IfBooleanT{#2}{\setboolean{#1}{true}}{\setboolean{#1}{false}}
+}
+\NewDocumentCommand{\SetNewBool}{m !t+ !t-}{
+  \newboolean{#1}
+  \IfBooleanT{#2}{\setboolean{#1}{true}}{\setboolean{#1}{false}}
+}
+\newcommand{\IfBoolTF}[3]{\ifthenelse{\boolean{#1}}{#2}{#3}}
+\newcommand{\IfBoolT}[2]{\IfBoolTF{#1}{#2}{}}
+\newcommand{\IfBoolF}[2]{\IfBoolTF{#1}{}{#2}}
+% - - - ページの偶奇による条件分岐 - - -
+\usepackage{ifoddpage}
+\newcommand{\IfPageLR}[2]{\checkoddpage\ifoddpage #2\else #1\fi}
+% - - - 値設定 - - -
+\MyBoolSettings
+\SetNewBool{節あり}
+\SetNewBool{章番号あり}
+\SetNewBool{節番号あり}
 
 
 
-%%%%% ページレイアウト
-\setpagelayout+{vmargin=10truemm, hmargin=17truemm, includemp, nomarginpar}
-\usepackage[bottom]{footmisc}
+%%%%% \section{ページレイアウト}
+\setpagelayout*{
+  headheight=10pt,
+  footskip=0.03367\paperheight,
+  headsep=\footskip-\topskip,
+  includeheadfoot,
+  hscale=0.8,
+  hmarginratio=1:1,
+  vscale=0.9,
+  vmarginratio=1:1
+}
+\geometry{marginparwidth=20pt}
 
 
 
-%%%%% フォント／書体／文字関連
+%%%%% \section{フォント／書体／文字関連}
 % - - - 和文 - - -
 \ltjsetparameter{jacharrange={-2,-3}}
 \setsansjfont{HaranoAjiGothic}[
@@ -23,20 +46,19 @@
   BoldFont={*-Bold},
 ]
 % - - - 欧文／数学記号 - - -
-\PassOptionsToPackage{math-style=ISO, colon=literal}{unicode-math}
+\PassOptionsToPackage{math-style=literal}{unicode-math}
 \usepackage[olddefault, newcmbb, varnothing]{fontsetup}
 \setmathfont[range={scr, bfscr}, StylisticSet=1]{NewCMMath-Regular}
 \DeclareMathAlphabet{\cl}{OMS}{cmsy}{m}{n} % 旧チャンセリー筆記体
 \setsansfont{nimbussans}
-% - - - 追加数学記号 - - -
+% - - - テキスト書体 - - -
+\renewcommand{\sf}{\sffamily}
+\newcommand{\sfbf}{\sffamily\bfseries}
+\newcommand{\textsfbf}[1]{{\sffamily\bfseries #1}}
+% - - - 追加記号 - - -
 \usepackage{manfnt}
 \usepackage[old]{old-arrows}
-% - - - 数学記号調整 - - -
-\usepackage{leftidx}
-\usepackage{longmath}
-% - - - テキスト書体 - - -
-\newcommand{\gs}{\sffamily}
-\newcommand{\gsb}{\gs\bfseries}
+\usepackage{fontawesome5}
 % - - - Unicode - - -
 \usepackage{newunicodechar}
 % - - - ルビ - - -
@@ -44,114 +66,97 @@
 
 
 
-%%%%% 色
-\usepackage{xcolor}
+%%%%% \section{色}
+\usepackage{xcolor, luacolor, lua-ul}
 % - - - 色を定義 - - -
+% \definecolor{defaultcolor}{HTML}{333333}
+% \color{defaultcolor}
+% \colorlet{black}{defaultcolor}
 \definecolor{mygreen}{HTML}{75b651}
 \definecolor{myblue}{HTML}{6e9dc2}
 \definecolor{myred}{HTML}{c26e7c}
 \definecolor{myyellow}{HTML}{b8ba05}
 \definecolor{mygray}{HTML}{878787}
-\definecolor{mywhitegray}{HTML}{cccccc}
-\definecolor{myemphcolor}{HTML}{d11100}
+\definecolor{myemphcolor}{HTML}{d94876}
 \definecolor{myurlcolor}{HTML}{ad0d00}
 \definecolor{mylinkcolor}{HTML}{2a4f99}
 \definecolor{mycitecolor}{HTML}{2a4f99}
 % - - - テキスト彩色用マクロ - - -
-\newcommand{\gx}[1]{\textcolor{mygreen}{#1}}
-\newcommand{\bx}[1]{\textcolor{myblue}{#1}}
-\newcommand{\rx}[1]{\textcolor{myred}{#1}}
-\newcommand{\Gx}[1]{\textcolor{mygray}{#1}}
+\newcommand{\赤}[1]{\textcolor{myred}{#1}}
+\newcommand{\青}[1]{\textcolor{myblue}{#1}}
+\newcommand{\緑}[1]{\textcolor{mygreen}{#1}}
+\newcommand{\黄}[1]{\textcolor{myyellow}{#1}}
+\newcommand{\灰}[1]{\textcolor{mygray}{#1}}
 
 
 
-%%%%% ヘッダー／フッター
+%%%%% \section{ヘッダー／フッター}
 % クラスファイルによるページスタイル強制変更を除去
 \renewcommand{\plainifnotempty}{}
 % - - - 部・章・節番号の出力形式を設定 - - -
 \renewcommand{\postchaptername}{講}
 \renewcommand{\presectionname}{§}
 \newcommand{\presubsectionname}{§}
-\makeatletter
-\newcommand{\labelchapter}{\@chapapp\thechapter\@chappos}
-\newcommand{\labelsection}{\@secapp\thesection\@secpos}
-\newcommand{\labelsubsection}{\presubsectionname\thesubsection}
-\makeatother
+\newcommand{\章番号}{\@chapapp\thechapter\@chappos}
+\newcommand{\節番号}{\@secapp\thesection\@secpos}
+\newcommand{\小節番号}{\presubsectionname\thesubsection}
 % - - - 専用ページスタイルの定義 - - -
-\pagestyle{myheadings}
-\markboth{lefthead}{righthead}
 \usepackage{titleps}
-\newpagestyle{myps}[\small\gs]{%
+\newpagestyle{myps}[\small\sf]{%
   \headrule
-  \sethead[\textit{\thepage}][\myboolT{BoolIfChapNumbered}{\labelchapter\quad}\mychaptertitle][]
-  {}{\myboolTF{BoolIfSecExist}
-      {\myboolT{BoolIfSecNumbered}{\labelsection\quad}\mysectiontitle}
-      {\myboolT{BoolIfChapNumbered}{\labelchapter\quad}\mychaptertitle}
+  \sethead[\textit{\thepage}][\IfBoolT{章番号あり}{\章番号\quad}\章タイトル][]
+  {}{\IfBoolTF{節あり}
+      {\IfBoolT{節番号あり}{\節番号\quad}\節タイトル}
+      {\IfBoolT{章番号あり}{\章番号\quad}\章タイトル}
   }{\textit{\thepage}}%
 }
 \pagestyle{myps}
 
 
 
-%%%%% 見出しとセクショニング
-% titleps の都合で AfterEndPreamble 実行
-% - - - 章 - - -
-\AfterEndPreamble{
-  \NewCommandCopy{\oldchapter}{\chapter}
-  \RenewDocumentCommand{\chapter}{sms}{
-    \IfBooleanTF{#1}{
-      \oldchapter*{#2}
-      \IfBooleanT{#3}{\addcontentsline{toc}{chapter}{#2}}
-      \mysetbool{BoolIfChapNumbered}{false}
-    }{
-      \oldchapter{#2}
-      \mysetbool{BoolIfChapNumbered}{true}
-    }
-    \mysetbool{BoolIfSecExist}{false}
-    \def\mychaptertitle{#2}
-    \thispagestyle{empty}
+%%%%% \section{余白}
+\usepackage{marginnote}
+% - - - 余白部分のアイコン定義 - - -
+% 定義用マクロ
+\newcommand{\NewRangeIcon}[2]{
+  \newenvironment{#1}
+  {\IfPageLR
+    {\marginnote[\hfill#2]{}}
+    {\reversemarginpar\marginnote[\hfill#2]{}\normalmarginpar}%
   }
-  % - - - 節 - - -
-  \NewCommandCopy{\oldsection}{\section}
-  \RenewDocumentCommand{\section}{sms}{
-    \IfBooleanTF{#1}{
-      \oldsection*{#2}
-      \IfBooleanT{#3}{\addcontentsline{toc}{section}{#2}}
-      \mysetbool{BoolIfSecNumbered}{false}
-    }{
-      \oldsection{#2}
-      \mysetbool{BoolIfSecNumbered}{true}
-    }
-    \mysetbool{BoolIfSecExist}{true}
-    \def\mysectiontitle{#2}
-  }
-  % - - - 小節 - - -
-  \NewCommandCopy{\oldsubsection}{\subsection}
-  \RenewDocumentCommand{\subsection}{sms}{
-    \IfBooleanTF{#1}{
-      \oldsubsection*{#2}
-      \IfBooleanT{#3}{\addcontentsline{toc}{subsection}{#2}}
-    }{
-      \oldsubsection{#2}
-    }
+  {\IfPageLR
+    {\reversemarginpar\marginnote{#2\hfill}\normalmarginpar}
+    {\marginnote{#2\hfill}}%
   }
 }
+
+% 定義
+\NewRangeIcon{dng}{\dbend}
+
+
+
+%%%%% \section{見出しとセクショニング}
+% → tcolorbox
 % - - - セパレーター - - -
 \usepackage{froufrou}
+\newcommand{\＝＝＝＝＝}{\froufrou*}
 
 
 
-%%%%% 目次
+%%%%% \section{脚注}
+\RenewDocumentCommand{\*}{sO{}}{\IfBlankTF{#2}{\footnotemark{}}{\footnotetext{#2}}}
+
+
+
+%%%%% \section{目次}
 \patchcmd{\tableofcontents}{*{\contentsname}}{*{\contentsname}\addcontentsline{toc}{chapter}{\contentsname}}{}{}
 \setcounter{tocdepth}{2}
-\makeatletter
 \patchcmd{\l@subsection}{3.5\jsZw}{4\jsZw}{}{}
-\makeatother
 
 
 
-%%%%% ウォーターマーク／ラベル表示
-\myboolT{BoolUseDraft}{
+%%%%% \section{ウォーターマーク／ラベル表示}
+\IfBoolT{ドラフト出力}{
   \usepackage{draftwatermark}
   \usepackage[notref]{showkeys}
   \renewcommand*{\showkeyslabelformat}[1]{\normalfont\scriptsize\ttfamily\llap{\fbox{#1}}}
@@ -159,7 +164,7 @@
 
 
 
-%%%%% ハイパーリンク
+%%%%% \section{ハイパーリンク}
 \usepackage{hyperref}
 \hypersetup{
   setpagesize=false,
@@ -172,32 +177,30 @@
   pdfauthor={鴎海},
   linktoc=all
 }
+\NewCommandCopy{\oldhref}{\href}
+\renewcommand{\href}[2]{\oldhref{#1}{\underLine[myurlcolor]{#2}}}
 % - - - namerefで参照可能なラベル - - -
-% \mylabel{#1:label}[#2:name]
-\makeatletter
-\NewDocumentCommand{\mylabel}{mO{}}{
+% \mylabel{#1:label}"#2:nameref"
+\NewDocumentCommand{\mylabel}{mD""{}}{%
   \bgroup
     \protected@edef\@currentlabelname{#2}
     \label{#1}
-  \egroup
+  \egroup%
 }
-\makeatother
 % - - - 任意の位置のラベル - - -
-\newcommand{\phantomlabel}[1]{\phantomsection\label{#1}}
+\newcommand{\labelhere}[1]{\phantomsection\label{#1}}
 % - - - ページ番号が右上に表示されたハイパーリンク - - -
-% \phyperref[#1:label]{#2:テキスト}
-\newcommand{\phyperref}[2]{\hyperref[#1]{#2\textsuperscript{→p.\,\pageref*{#1}}}}
+% \seepage[#1:label]{#2:テキスト}
+\newcommand{\seepage}[2]{\hyperref[#1]{#2\textsuperscript{→p.~\pageref*{#1}}}}
 
 
 
-%%%%% cleveref
+%%%%% \section{cleveref}
 \usepackage[nameinlink]{cleveref}
 % - - - ページ - - -
 \crefname{page}{p.}{pp.}
 % - - - 章 - - -
-\makeatletter
 \crefformat{chapter}{#2\@chapapp #1\@chappos #3}
-\makeatother
 % - - - 節 - - -
 \crefname{section}{\presectionname}{\presectionname}
 % - - - 小節 - - -
@@ -208,7 +211,7 @@
 
 
 
-%%%%% リスト
+%%%%% \section{リスト}
 \usepackage{tasks}
 \usepackage[inline]{enumitem}
 \setlist{align=left, leftmargin=*}
@@ -222,32 +225,120 @@
 \setlist[myenum, 1]{label=(\arabic{myenumi}), ref=(\arabic{myenumi})}
 \setlist[myenum, 2]{label=(\arabic{myenumi}.\arabic{myenumii}), ref=(\arabic{myenumi}.\arabic{myenumii})}
 \setlist[myenum, 3]{label=(\arabic{myenumi}.\arabic{myenumii}.\arabic{myenumiii}), ref=(\arabic{myenumi}.\arabic{myenumii}.\arabic{myenumiii})}
-% - - - description の item を ref と nameref で参照可能にしたもの- - -
-% \begin{description}
-%   \iteml[#1:項目名]{#2:label}[#3:nameref] 
-% \end{description}
-\makeatletter
-\NewDocumentCommand{\iteml}{O{}mO{}}{
-  \item[#1]
-  \phantomsection
-  \IfBlankTF{#3}
-    {\renewcommand{\@currentlabel}{#1}\mylabel{#2}[#1]}
-    {\renewcommand{\@currentlabel}{#3}\mylabel{#2}[#3]}
+% - - - \item を ref と nameref で参照可能にしたもの- - -
+% \begin{...}
+%   \item[#1:項目名](#2:label)"#3:nameref"
+% \end{...}
+\NewCommandCopy{\olditem}{\item}
+\RenewDocumentCommand{\item}{O{}D(){}D""{}}{%
+  \IfBlankTF{#1}
+    {\olditem
+    \IfBlankTF{#3}
+      {\IfBlankF{#2}{\mylabel{#2}}}
+      {\renewcommand{\@currentlabel}{#3}\mylabel{#2}"#3"}%
+    }
+    {\olditem[#1]
+    \phantomsection
+    \IfBlankTF{#3}
+      {\renewcommand{\@currentlabel}{#1}\mylabel{#2}"#1"}
+      {\renewcommand{\@currentlabel}{#3}\mylabel{#2}"#3"}%
+    }
 }
-\makeatother
 
 
 
-%%%%% 数式
-\everymath=\expandafter{\the\everymath \narrowbaselines\displaystyle}
+%%%%% \section{数式}
+\everymath=\expandafter{\the\everymath\narrowbaselines\displaystyle}
+\usepackage{leftidx}
+\usepackage{longmath}
 \usepackage{scalerel}
 \allowdisplaybreaks[4]
 
 
 
-%%%%% tcolorbox
-\usepackage{tcolorbox}
-\tcbuselibrary{skins, breakable}
+%%%%% \section{tcolorbox}
+\usepackage[skins, breakable]{tcolorbox}
+% - - - 見出し - - -
+\AfterEndPreamble{
+  % chapter
+  \newtcolorbox{chapbox}{
+    phantom={\phantomsection},
+    tile,
+    fontupper=\sf,
+    halign=flush center,
+  }
+  \RenewDocumentCommand{\chapter}{sm!t+}{
+    \clearpage
+    \IfBooleanF{#1}
+      {\refstepcounter{chapter}}
+    \begin{chapbox}
+      \IfBooleanF{#1}{\Large ─\ \章番号\ ─\\}
+      \LARGE #2
+    \end{chapbox}
+    \IfBooleanTF{#1}
+      {\IfBooleanT{#3}
+        {\addcontentsline{toc}{chapter}{#2}}
+      \SetBool{章番号あり}-}
+      {\addcontentsline{toc}{chapter}{\protect\numberline{\章番号}#2}
+      \SetBool{章番号あり}+}
+    \SetBool{節あり}-
+    \def\章タイトル{#2}
+    \protected@edef\@currentlabelname{#2}
+    \thispagestyle{empty}
+    \addvspace{2\baselineskip}
+  }
+  % section
+  \newtcolorbox{sectbox}{
+    phantom={\phantomsection}, 
+    blank,
+    size=minimal,
+    fontupper=\sf,
+  }
+  \RenewDocumentCommand{\section}{sm!t+}{
+    \IfBooleanF{#1}
+      {\refstepcounter{section}}
+    \addvspace{1.5\baselineskip}
+    \begin{sectbox}
+      \IfBooleanTF{#1}
+        {\Large #2\hspace{.5em}\hrulefill}
+        {\large \節番号\hspace{.5em}\hrulefill \vspace{.5ex}\\ \Large #2}
+    \end{sectbox}
+    \IfBooleanTF{#1}
+      {\IfBooleanT{#3}
+        {\addcontentsline{toc}{section}{#2}}
+      \SetBool{節番号あり}-}
+      {\addcontentsline{toc}{section}{\protect\numberline{\節番号}#2}
+      \SetBool{節番号あり}+}
+    \SetBool{節あり}+
+    \def\節タイトル{#2}
+    \protected@edef\@currentlabelname{#2}
+    \addvspace{\baselineskip}
+  }
+  % subsection
+  \newtcolorbox{subsectbox}{
+    phantom={\phantomsection}, 
+    blank,
+    size=minimal,
+    fontupper=\sf\large,
+  }
+  \RenewDocumentCommand{\subsection}{sm!t+}{
+    \IfBooleanF{#1}
+      {\refstepcounter{subsection}}
+    \addvspace{\baselineskip}
+    \begin{subsectbox}
+      \IfBooleanTF{#1}
+        {#2\hspace{.5em}\dotfill}
+        {\小節番号 \quad #2\hspace{.5em}\dotfill}
+    \end{subsectbox}
+    \IfBooleanTF{#1}
+      {\IfBooleanT{#3}
+        {\addcontentsline{toc}{subsection}{#2}}}
+      {\addcontentsline{toc}{subsection}{\protect\numberline{\小節番号}#2}}
+    \protected@edef\@currentlabelname{#2}
+    \addvspace{.5\baselineskip}
+  }
+}
+% - - - 項目 - - -
 \NewTColorBox[auto counter, number within=chapter]{none}{}{}
 % \defitem{#1:環境名}{#2:日本語タイトル}{#3:色}[#4:下側コンテンツのタイトル]
 \NewDocumentCommand{\defitem}{mmmO{}}{
@@ -259,15 +350,15 @@
     enhanced, breakable,
     boxrule=1pt, colframe=#3,
     colback=#3!10!white, skin=bicolor, colbacklower=white,
-    fonttitle=\gsb,
+    fonttitle=\sf,
     nameref={##2},
     title={#2\thetcbcounter\IfBlankF{##3}{：##3}},
     IfBlankF={##1}{label={##1}},
     before upper={\crefalias{thmlisti}{thmlist#1}},
-    before lower={\IfBlankF{#4}{\textsf{#4}\hspace{1\zw}}},
+    before lower={\IfBlankF{#4}{\textsf{#4}}\quad},
   }
 }
-\newcommand{\tcbex}{{\gsb 例：}\hspace{1em}}
+\newcommand{\tcbex}{\textsf{例}\quad}
 % - - - 項目を定義 - - -
 \defitem{elc}{解明}{myblue}[例]
 \defitem{rgl}{規約}{myblue}[例]
@@ -292,27 +383,41 @@
     enhanced, breakable,
     boxrule=1pt, colframe=#3,
     colback=#3!10!white, skin=bicolor, colbacklower=white,
-    fonttitle=\gsb,
+    fonttitle=\sf,
     title={#2\thetcbcounter\IfBlankF{##1}{：##1}},
     before upper={\crefalias{thmlisti}{thmlist#1}},
-    before lower={\IfBlankF{#4}{\textsf{#4}\hspace{1\zw}}},
+    before lower={\IfBlankF{#4}{\textsf{#4}\quad}},
   }
 }
 \defitem{axm}{公理}{myred}[例]
 \defitem{infrule}{推論規則}{myred}[例]
 
 % 例題環境を定義
+\crefname{thmlistexc}{例題}{例題}
 \NewTColorBox[auto counter, crefname={例題}{例題}]{exc}{O{}}{
   blank,
   enhanced, breakable,
   size=normal,
   borderline horizontal={1pt}{0pt}{myblue}, 
   title={例題\thetcbcounter},
-  fonttitle=\gsb, colbacktitle=myblue,
+  fonttitle=\sf, colbacktitle=myblue,
   attach boxed title to top left={xshift=-1pt, yshift=-\tcboxedtitleheight/2, yshifttext=-\tcboxedtitleheight/6},
   boxed title style={tile, size=small},
   IfBlankF={#1}{label={#1}},
-  before upper={\crefalias{thmlisti}{thmlist#1}},
+  before upper={\crefalias{thmlisti}{thmlistexc}},
+}
+
+% 注意環境を定義
+\NewTColorBox[auto counter, crefname={注意}{注意}]{nb}{O{}D""{}}{
+  empty,
+  enhanced, breakable,
+  tile, colback=myyellow!10!white,
+  borderline west={4pt}{0pt}{myyellow},
+  detach title,
+  fonttitle=\sf, coltitle=black,
+  title={注意\thetcbcounter\IfBlankF{#2}{（#2）}},
+  IfBlankF={#1}{label={#1}},
+  before upper={\tcbtitle\quad},
 }
 
 % 汎用環境を定義
@@ -320,10 +425,10 @@
   blank,
   enhanced, breakable,
   size=normal,
-  top=1pt, bottom=1pt,
+  top=0pt, bottom=0pt,
   borderline west={2pt}{0pt}{mygray},
   detach title,
-  fonttitle=\gsb, coltitle=black,
+  fonttitle=\sf, coltitle=black,
   title={#2\IfBlankF{#3}{（#3）}},
   IfBlankF={#1}{label={#1}},
   before upper={\tcbtitle\quad},
@@ -334,34 +439,34 @@
   blank,
   enhanced, breakable,
   size=normal,
-  borderline={.7pt}{0pt}{dashed}, colframe=black,
+  borderline={.7pt}{0pt}{black,dashed},
   colback=white,
-  title={\labelchapter の概要},
+  title={\章番号 の概要},
   boxed title style={tile, size=small},
-  fonttitle=\gsb, coltitle=black, colbacktitle=white,
+  fonttitle=\sf, coltitle=black, colbacktitle=white,
   attach boxed title to top text left={yshift*=-\tcboxedtitleheight/2},
   environment upper=itemize,
 }
 
 
 
-%%%%% TikZ・グラフィックス
+%%%%% \section{TikZ／グラフィックス}
 \usepackage{forest}
 
 
 
-%%%%% 表など
+%%%%% \section{表など}
 \usepackage{xltabular}
 \usepackage{booktabs}
 
 
 
-%%%%% 索引
+%%%%% \section{索引}
 % 記号類の見出しを変える
 \newcommand{\symbolindexname}{記号・数字}
 % - - - \idx のkey-val - - -
 \ExplSyntaxOn
-\myboolTF{BoolShowIndex}{
+\IfBoolTF{索引を出力}{
   \keys_define:nn { idx } {
     child .tl_set:N = \l_idx_child_tl,
     child-sort .tl_set:N = \l_idx_childsort_tl,
@@ -369,7 +474,7 @@
     entry-sort .tl_set:N = \l_idx_entrysort_tl
   }
   % - - - 索引コマンド - - -
-  % \idx{#1:本文中の表示}{#2:よみがな（索引における#1のソート位置）}[#3:英訳][#4:key-value リスト]
+  % \idx{#1:本文中の表示}{#2:よみがな（索引における#1のソート位置）}"#3:英訳"[#4:key-value リスト]
   % keyは以下の通り
   % child: 索引の子エントリのテキスト（初期値 = なし）
   % child-sort: child のソート位置（初期値 = child の値）
@@ -398,18 +503,68 @@
   \usepackage{makeidx}
   \makeindex
 }{
-  \newcommand{\printindex}{}
   \NewDocumentCommand{\idx}{mmD""{}O{}}{\emph{#1}\IfBlankF{#3}{（#3）}}
 }
 \ExplSyntaxOff
 
 
 
-%%%%% その他
+%%%%% 参考文献
+\IfBoolT{参考文献を出力}{
+  \usepackage[style=authoryear, backend=biber]{biblatex}
+  \addbibresource{biblio.bib}
+  \DeclareNameAlias{default}{family-given}
+  \newcommand{\PrintBibliography}{
+    \nocite{*}
+    \printbibliography[title=参考文献, label=biblio]
+  }
+}
+
+
+
+%%%%% グロッサリー
+\IfBoolTF{グロッサリーを出力}{
+  \usepackage[record]{glossaries-extra}
+  \GlsXtrLoadResources[src=symbols, set-widest, sort=use]
+  \newglossarystyle{symbol-list}{
+    \renewenvironment{theglossary}{
+      \begin{longtable}[l]{@{}cll@{}}
+    }{%
+      \end{longtable}
+    }
+    \renewcommand*{\glossaryheader}{%
+      \toprule
+      {\sf 記号} & {\sf 説明} & {\sf 項目} \\
+      \midrule
+      \endfirsthead
+      \toprule
+      {\sf 記号} & {\sf 説明} & {\sf 項目} \\
+      \midrule
+      \endhead
+      \bottomrule
+      \endfoot
+      \bottomrule
+      \endlastfoot
+    }
+    \renewcommand*{\glossentry}[2]{%
+      \glossentrysymbol{##1} & \glossentrydesc{##1} & \glstarget{##1}{\glossentryname{##1}} \tabularnewline
+    }
+    \renewcommand*{\glossarytitle}{記号一覧}
+    \renewcommand*{\glossarytoctitle}{記号一覧}
+    \newcommand{\PrintGlossary}{\printunsrtglossary[style=symbol-list]}
+  }
+}{
+  \newcommand{\glsadd}[1]{}
+}
+
+
+%%%%% \section{その他}
 % 章末問題
 % 改行
 \newcommand{\mypar}{\vspace{.5\baselineskip}\par}
 % \emph の1番目の色
-\DeclareEmphSequence{\color{myemphcolor}\sffamily}
+\DeclareEmphSequence{\color{myemphcolor}\sf}
 % 例示
 \newcommand{\example}[1]{\textsuperscript{\normalsize ∗}#1\textsubscript{\normalsize ∗}}
+
+\makeatother
