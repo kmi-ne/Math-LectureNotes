@@ -247,6 +247,11 @@
 
 
 
+%%%%% \section{コード}
+\usepackage{../formalproofwriter}
+
+
+
 %%%%% \section{数式}
 \everymath=\expandafter{\the\everymath\narrowbaselines\displaystyle}
 \usepackage{leftidx}
@@ -509,7 +514,7 @@
 
 
 
-%%%%% 参考文献
+%%%%% \section{参考文献}
 \IfBoolT{参考文献を出力}{
   \usepackage[style=authoryear, backend=biber]{biblatex}
   \addbibresource{biblio.bib}
@@ -522,7 +527,7 @@
 
 
 
-%%%%% グロッサリー
+%%%%% \section{グロッサリー}
 \IfBoolTF{グロッサリーを出力}{
   \usepackage[record]{glossaries-extra}
   \GlsXtrLoadResources[src=symbols, set-widest, sort=use]
@@ -556,6 +561,7 @@
 }{
   \newcommand{\glsadd}[1]{}
 }
+
 
 
 %%%%% \section{その他}
