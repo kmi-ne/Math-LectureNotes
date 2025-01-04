@@ -509,7 +509,7 @@
   \usepackage{makeidx}
   \makeindex
 }{
-  \NewDocumentCommand{\idx}{mmD""{}O{}}{\emph{#1}\IfBlankF{#3}{（#3）}}
+  \NewDocumentCommand{\idx}{mmD""{}O{}}{\emph{#1\IfBlankF{#3}{（#3）}}}
 }
 \ExplSyntaxOff
 
