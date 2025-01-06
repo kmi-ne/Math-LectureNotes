@@ -36,6 +36,8 @@
 }
 \geometry{marginparwidth=20pt}
 
+\usepackage{multicol}
+
 
 
 %%%%% \section{フォント／書体／文字関連}
@@ -468,8 +470,6 @@
 
 
 %%%%% \section{索引}
-% 記号類の見出しを変える
-\newcommand{\symbolindexname}{記号・数字}
 % - - - \idx のkey-val - - -
 \ExplSyntaxOn
 \IfBoolTF{索引を出力}{
@@ -509,9 +509,16 @@
     \group_end:
   }
   \usepackage{makeidx}
+  % 索引の見出しを変更
+  \patchcmd{\theindex}
+    {\chapter*{\indexname}\addcontentsline{toc}{chapter}{\indexname}}
+    {\chapter*{\indexname}+}{}{}
+  % 記号類の見出しを変更
+  \newcommand{\symbolindexname}{記号・数字}
   \makeindex
 }{
   \NewDocumentCommand{\idx}{mmD""{}O{}}{\emph{#1\IfBlankF{#3}{（#3）}}}
+  \renewcommand{\index}[1]{}
 }
 \ExplSyntaxOff
 
