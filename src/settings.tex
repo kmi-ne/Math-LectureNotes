@@ -489,8 +489,10 @@
   \NewDocumentCommand { \idx } { mmD""{}O{} } {
     \group_begin:
     \keys_set:nn { idx } { #4 }
-    \color{myemphcolor} \textsf{#1}
-    \tl_if_empty:nTF { #3 } {} { （#3） }
+    \emph{
+      #1
+      \tl_if_empty:nTF { #3 } {} { （#3） }
+    }
     \tl_if_empty:NTF \l_idx_child_tl {
       \tl_if_empty:NTF \l_idx_entry_tl {
         \index{#2@#1}
