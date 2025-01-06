@@ -7,4 +7,5 @@ if ($jobname == 'main') {
 
 $lualatex = 'texfot lualatex %O -halt-on-error -file-line-error %S';
 # $lualatex = 'lualatex %O -halt-on-error -file-line-error %S';
-$out_dir = '../../pdf/' . basename($path)
+$out_dir = '../../pdf/' . basename($path);
+$makeindex = 'upmendex -s jpbase -l %O -o %D %S';
