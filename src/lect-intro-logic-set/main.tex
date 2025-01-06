@@ -1,4 +1,4 @@
-\documentclass[lualatex, ja=standard, b5j, twoside, label-section=none]{bxjsreport}
+\documentclass[lualatex, ja=standard, twoside, label-section=none]{bxjsreport}
 
 
 % + + + スイッチ + + +
@@ -6,7 +6,7 @@
   % 編集者向けドラフト出力をするか（ラベル表示・余白変更・ウォーターマーク）
   \SetNewBool{ドラフト出力}+
   % 索引を出力するか
-  \SetNewBool{索引を出力}
+  \SetNewBool{索引を出力}+
   % 記号一覧を出力するか
   \SetNewBool{グロッサリーを出力}
   % 参考文献を出力するか
@@ -66,7 +66,13 @@
 \part{論理学}
 
 \input{sub/logic/01.tex}
+
+\input{sub/logic/02.tex}
 % + + + + + + + +
+
+\cleardoublepage
+\part*{参考文献・索引・記号一覧}
+\addcontentsline{toc}{part}{参考文献・索引・記号一覧}
 
 % 参考文献
 \IfBoolT{参考文献を出力}{\PrintBibliography}
