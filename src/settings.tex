@@ -515,6 +515,8 @@
   \patchcmd{\theindex}
     {\chapter*{\indexname}\addcontentsline{toc}{chapter}{\indexname}}
     {\chapter*{\indexname}+}{}{}
+  \patchcmd{\begintheindex}{\begin{multicols}{2}}{\begin{multicols*}{2}}{}{}
+  \patchcmd{\begintheindex}{\end{multicols}}{\end{multicols*}}{}{}
   % 記号類の見出しを変更
   \newcommand{\symbolindexname}{記号・数字}
   \makeindex
