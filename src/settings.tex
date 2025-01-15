@@ -17,9 +17,6 @@
 \newcommand{\IfPageLR}[2]{\checkoddpage\ifoddpage #2\else #1\fi}
 % - - - 値設定 - - -
 \MyBoolSettings
-\SetNewBool{節あり}
-\SetNewBool{章番号あり}
-\SetNewBool{節番号あり}
 
 
 
@@ -100,16 +97,14 @@
 \newcommand{\節番号}{\@secapp\thesection\@secpos}
 \newcommand{\小節番号}{\presubsectionname\thesubsection}
 % - - - 専用ページスタイルの定義 - - -
-\usepackage{titleps}
-\newpagestyle{myps}[\small\sf]{%
-  \headrule
-  \sethead[\textit{\thepage}][\IfBoolT{章番号あり}{\章番号\quad}\章タイトル][]
-  {}{\IfBoolTF{節あり}
-      {\IfBoolT{節番号あり}{\節番号\quad}\節タイトル}
-      {\IfBoolT{章番号あり}{\章番号\quad}\章タイトル}
-  }{\textit{\thepage}}%
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyheadinit{\small\sf}
+  \fancyhead[RO,LE]{\textit{\thepage}}
+  \fancyhead[CE]{\LeftHeader}
+  \fancyhead[CO]{\RightHeader}
 }
-\pagestyle{myps}
 
 
 
@@ -135,6 +130,11 @@
 
 
 %%%%% \section{見出しとセクショニング}
+% \part
+\patchcmd{\part}
+  {\thispagestyle{empty}}
+  {\pagestyle{empty}}
+  {}{}
 % → tcolorbox
 % - - - セパレーター - - -
 \usepackage{froufrou}
@@ -264,86 +264,87 @@
 
 %%%%% \section{tcolorbox}
 \usepackage[skins, breakable]{tcolorbox}
+
 % - - - 見出し - - -
-\AfterEndPreamble{
-  % chapter
-  \newtcolorbox{chapbox}{
-    phantom={\phantomsection},
-    tile,
-    fontupper=\sf,
-    halign=flush center,
-  }
-  \RenewDocumentCommand{\chapter}{sm!t+}{
-    \clearpage
-    \IfBooleanF{#1}
-      {\refstepcounter{chapter}}
-    \begin{chapbox}
-      \IfBooleanF{#1}{\Large ─\ \章番号\ ─\\}
-      \LARGE #2
-    \end{chapbox}
-    \IfBooleanTF{#1}
-      {\IfBooleanT{#3}
-        {\addcontentsline{toc}{chapter}{#2}}
-      \SetBool{章番号あり}-}
-      {\addcontentsline{toc}{chapter}{\protect\numberline{\章番号}#2}
-      \SetBool{章番号あり}+}
-    \SetBool{節あり}-
-    \def\章タイトル{#2}
-    \protected@edef\@currentlabelname{#2}
-    \thispagestyle{empty}
-    \addvspace{2\baselineskip}
-  }
-  % section
-  \newtcolorbox{sectbox}{
-    phantom={\phantomsection}, 
-    blank,
-    size=minimal,
-    fontupper=\sf,
-  }
-  \RenewDocumentCommand{\section}{sm!t+}{
-    \IfBooleanF{#1}
-      {\refstepcounter{section}}
-    \addvspace{1.5\baselineskip}
-    \begin{sectbox}
-      \IfBooleanTF{#1}
-        {\Large #2\hspace{.5em}\hrulefill}
-        {\large \節番号\hspace{.5em}\hrulefill \vspace{.5ex}\\ \Large #2}
-    \end{sectbox}
-    \IfBooleanTF{#1}
-      {\IfBooleanT{#3}
-        {\addcontentsline{toc}{section}{#2}}
-      \SetBool{節番号あり}-}
-      {\addcontentsline{toc}{section}{\protect\numberline{\節番号}#2}
-      \SetBool{節番号あり}+}
-    \SetBool{節あり}+
-    \def\節タイトル{#2}
-    \protected@edef\@currentlabelname{#2}
-    \addvspace{\baselineskip}
-  }
-  % subsection
-  \newtcolorbox{subsectbox}{
-    phantom={\phantomsection}, 
-    blank,
-    size=minimal,
-    fontupper=\sf\large,
-  }
-  \RenewDocumentCommand{\subsection}{sm!t+}{
-    \IfBooleanF{#1}
-      {\refstepcounter{subsection}}
-    \addvspace{\baselineskip}
-    \begin{subsectbox}
-      \IfBooleanTF{#1}
-        {#2\hspace{.5em}\dotfill}
-        {\小節番号 \quad #2\hspace{.5em}\dotfill}
-    \end{subsectbox}
-    \IfBooleanTF{#1}
-      {\IfBooleanT{#3}
-        {\addcontentsline{toc}{subsection}{#2}}}
-      {\addcontentsline{toc}{subsection}{\protect\numberline{\小節番号}#2}}
-    \protected@edef\@currentlabelname{#2}
-    \addvspace{.5\baselineskip}
-  }
+% chapter
+\newtcolorbox{chapbox}{
+  phantom={\phantomsection},
+  tile,
+  fontupper=\sf,
+  halign=flush center,
 }
+\RenewDocumentCommand{\chapter}{sm!t+}{
+  \clearpage
+  \def\章タイトル{#2}
+  \IfBooleanF{#1}{\refstepcounter{chapter}}
+  \begin{chapbox}
+    \IfBooleanF{#1}{\Large ─\ \章番号\ ─\\}
+    \LARGE \章タイトル
+  \end{chapbox}
+  \IfBooleanTF{#1}{%
+    \IfBooleanT{#3}{\addcontentsline{toc}{chapter}{\章タイトル}}
+    \def\LeftHeader{\章タイトル}
+    \def\RightHeader{\章タイトル}
+  }{%
+    \addcontentsline{toc}{chapter}{\protect\numberline{\章番号}\章タイトル}
+    \def\LeftHeader{\章番号 \quad \章タイトル}
+    \def\RightHeader{\章番号 \quad \章タイトル}
+  }%
+  \protected@edef\@currentlabelname{\章タイトル}
+  \pagestyle{plain}
+  \thispagestyle{empty}
+  \addvspace{2\baselineskip}
+}
+% section
+\newtcolorbox{sectbox}{
+  phantom={\phantomsection}, 
+  blank,
+  size=minimal,
+  fontupper=\sf,
+}
+\RenewDocumentCommand{\section}{sm!t+}{
+  \addvspace{1.5\baselineskip}
+  \def\節タイトル{#2}
+  \IfBooleanF{#1}{\refstepcounter{section}}
+  \begin{sectbox}
+    \IfBooleanTF{#1}
+      {\Large #2\hspace{.5em}\hrulefill}
+      {\large \節番号\hspace{.5em}\hrulefill \vspace{.5ex}\\ \Large #2}
+  \end{sectbox}
+  \IfBooleanTF{#1}{%
+    \IfBooleanT{#3}{\addcontentsline{toc}{section}{\節タイトル}}
+    \def\RightHeader{\節タイトル}
+  }{%
+    \addcontentsline{toc}{section}{\protect\numberline{\節番号}\節タイトル}
+    \def\RightHeader{\節番号 \quad \節タイトル}
+  }%
+  \protected@edef\@currentlabelname{\節タイトル}
+  \addvspace{\baselineskip}
+}
+% subsection
+\newtcolorbox{subsectbox}{
+  phantom={\phantomsection}, 
+  blank,
+  size=minimal,
+  fontupper=\sf\large,
+}
+\RenewDocumentCommand{\subsection}{sm!t+}{
+  \IfBooleanF{#1}{\refstepcounter{subsection}}
+  \addvspace{\baselineskip}
+  \begin{subsectbox}
+    \IfBooleanTF{#1}
+      {#2\hspace{.5em}\dotfill}
+      {\小節番号 \quad #2\hspace{.5em}\dotfill}
+  \end{subsectbox}
+  \IfBooleanTF{#1}{%
+    \IfBooleanT{#3}{\addcontentsline{toc}{subsection}{#2}}
+  }{%
+    \addcontentsline{toc}{subsection}{\protect\numberline{\小節番号}#2}
+  }%
+  \protected@edef\@currentlabelname{#2}
+  \addvspace{.5\baselineskip}
+}
+
 % - - - 項目 - - -
 \NewTColorBox[auto counter, number within=chapter]{none}{}{}
 % \defitem{#1:環境名}{#2:日本語タイトル}{#3:色}[#4:下側コンテンツのタイトル]
