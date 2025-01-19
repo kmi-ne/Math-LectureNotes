@@ -51,6 +51,8 @@
 \renewcommand{\sf}{\sffamily}
 \newcommand{\sfbf}{\sffamily\bfseries}
 \newcommand{\textsfbf}[1]{{\sffamily\bfseries #1}}
+\DeclareEmphSequence{\sf}
+\newcommand{\term}[1]{\textcolor{mytermcolor}{\sf #1}}
 % - - - 追加記号 - - -
 \usepackage{manfnt}
 \usepackage[old]{old-arrows}
@@ -73,7 +75,7 @@
 \definecolor{myred}{HTML}{c26e7c}
 \definecolor{myyellow}{HTML}{b8ba05}
 \definecolor{mygray}{HTML}{878787}
-\definecolor{myemphcolor}{HTML}{d94876}
+\definecolor{mytermcolor}{HTML}{d94876}
 \definecolor{myurlcolor}{HTML}{ad0d00}
 \definecolor{mylinkcolor}{HTML}{2a4f99}
 \definecolor{mycitecolor}{HTML}{2a4f99}
@@ -489,7 +491,8 @@
   \NewDocumentCommand { \idx } { mmD""{}O{} } {
     \group_begin:
     \keys_set:nn { idx } { #4 }
-    \emph{
+    {
+      \color{mytermcolor}\sf
       #1
       \tl_if_empty:nTF { #3 } {} { （#3） }
     }
@@ -519,7 +522,7 @@
   \newcommand{\symbolindexname}{記号・数字}
   \makeindex
 }{
-  \NewDocumentCommand{\idx}{mmD""{}O{}}{\emph{#1\IfBlankF{#3}{（#3）}}}
+  \NewDocumentCommand{\idx}{mmD""{}O{}}{\term{#1\IfBlankF{#3}{（#3）}}}
   \renewcommand{\index}[1]{}
 }
 \ExplSyntaxOff
@@ -580,8 +583,6 @@
 % 章末問題
 % 改行
 \newcommand{\mypar}{\vspace{.5\baselineskip}\par}
-% \emph の1番目の色
-\DeclareEmphSequence{\color{myemphcolor}\sf}
 % 例示
 \newcommand{\example}[1]{\textsuperscript{\normalsize ∗}#1\textsubscript{\normalsize ∗}}
 
