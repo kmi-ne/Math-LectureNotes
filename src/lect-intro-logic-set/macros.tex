@@ -1,5 +1,37 @@
 % 数式クラスとオペレーター
-\NewDocumentCommand{\opr}{sm}{\IfBooleanTF{#1}{\operatorname{#2}}{\operatorname*{#2}}}
+\NewDocumentCommand{\opr}{sm}{\IfBooleanTF{#1}{\operatorname*{#2}}{\operatorname{#2}}}
 \newcommand{\Opr}[1]{\operatorname{\symsfup{#1}}}
+\NewDocumentCommand{\newopr}{sm}{
+  \IfBooleanTF{#1}
+    {\expandafter\newcommand\csname #2\endcsname{\operatorname*{#2}}}
+    {\expandafter\newcommand\csname #2\endcsname{\operatorname{#2}}}
+}
+\NewDocumentCommand{\newOpr}{sm}{
+  \IfBooleanTF{#1}
+    {\expandafter\newcommand\csname #2\endcsname{\operatorname*{\symsfup{#2}}}}
+    {\expandafter\newcommand\csname #2\endcsname{\operatorname{\symsfup{#2}}}}
+}
 
-\newcommand{\ar}{\opr{ar}}
+\newopr{ar}
+
+
+% mathrel
+\newcommand{\mGe}{\mathrel{\dot{≥}}}
+\newcommand{\mLe}{\mathrel{\dot{≤}}}
+\newcommand{\mGt}{\mathrel{\dot{>}}}
+\newcommand{\mLt}{\mathrel{\dot{<}}}
+
+
+% unicode
+\makeatletter
+\newcommand{\NewUniMT}[3]{\newunicodechar{#1}{\IfBoolTF{mmode}{#2}{#3}}}
+\chardef\my@text@Jdots="2026
+  \NewUniMT{…}{\dots}{\my@text@Jdots}
+\NewDocumentCommand{\my@dotequiv}{!t!}{\IfBooleanTF{#1}{\mathrel{\not\dotequiv}}{\dotequiv}}
+  \newunicodechar{⩧}{\my@dotequiv}
+\makeatother
+
+
+% その他
+\newcommand{\name}[1]{\text{「$#1$」}}
+\newcommand{\AB}{𝖠𝖡}
