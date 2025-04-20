@@ -1,0 +1,26 @@
+% - - - namerefで参照可能なラベル - - -
+% \mylabel{#1:label}"#2:nameref"
+\NewDocumentCommand{\mylabel}{m !D""{}}{%
+  \bgroup
+    \protected@edef\@currentlabelname{#2}
+    #1
+  \egroup%
+}
+
+% - - - ref と nameref で参照可能な \item - - -
+% \begin{...}
+%   \Item[#1:項目名](#2:label)"#3:nameref"
+% \end{...}
+\NewDocumentCommand{\Item}{O{} !D(){} !D""{}}{%
+  \IfBlankTF{#1}
+    {\item
+    \IfBlankTF{#3}
+      {\IfBlankF{#2}{\mylabel{#2}}}
+      {\mylabel{#2}"#3"}%
+    }
+    {\item[#1]
+    \IfBlankTF{#3}
+      {\phantomsection\IfBlankF{#2}{\mylabel{#2}"#1"}}
+      {\phantomsection\mylabel{#2}"#3"}%
+    }
+}
