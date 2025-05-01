@@ -1,0 +1,5 @@
+{
+    "workbench.editor.customLabels.patterns": {
+        "**/*.tex": "${dirname}/${filename}.${extname}"
+    }
+}
