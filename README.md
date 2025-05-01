@@ -12,6 +12,7 @@ Math-LectureNotes
 │     └─ lect-<講義の識別子>-<サブ文書識別子>.pdf [サブ文書]
 ├─ tex [tex ソース置き場]
 │  ├─ _cfg-global [全講義に共通の文書設定]
+│  │  ├─ .latexmkrc
 │  │  ├─ cfg.sty [メイン設定 (以下3つのいずれかを呼び出し)]
 │  │  ├─ cfg-draft.sty [とりあえずコンパイルしたいときの設定]
 │  │  ├─ cfg-full.sty [完成品用の設定]
