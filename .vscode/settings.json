@@ -1,5 +1,11 @@
 {
+    // VSCode
     "workbench.editor.customLabels.patterns": {
         "**/*.tex": "${dirname}/${filename}.${extname}"
+    },
+    // 拡張機能
+    "material-icon-theme.folders.associations": {
+        "_cfg-global": "Config",
+        "_cfg-local": "Config"
     }
 }
