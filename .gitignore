@@ -1,0 +1,17 @@
+# 一旦全てを無視
+*
+
+# 全フォルダを監視
+!*/
+
+# 以下を監視
+!*.bib
+!.gitattributes
+!.gitignore
+!.latexmkrc
+!*.json
+!*.md
+!*.pdf
+!*.py
+!*.sty
+!*.tex
