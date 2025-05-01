@@ -1,9 +1,0 @@
-\long\def\cana@extract#1#2#3#4#5{\unexpanded{#3}}
-\newcommand{\doubleref}[1]{%
-  \@ifundefined{r@#1}{\relax}{%
-    \edef\cana@temp{%
-      \expandafter\expandafter\expandafter\cana@extract\csname r@#1\endcsname%
-    }%
-    \ifx\cana@temp\@empty\cref{#1}\else\nameref{#1}\fi%
-  }%
-}
