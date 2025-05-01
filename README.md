@@ -33,8 +33,11 @@ Math-LectureNotes
 │     │  │  ├─ ...
 │     │  │  └─ misc [chapter 以外のサブソース置き場]
 │     │  │     └─ <サブソース名>.tex
+│     │  ├─ .latexmkrc
 │     │  └─ main.tex [メインソース]
 │     └─ <サブ文書識別子> [サブ文書のソース置き場]
+│        ├─ ...
+│        ├─ .latexmkrc
 │        └─ main.tex
 ├─ .gitattributes
 ├─ .gitignore
