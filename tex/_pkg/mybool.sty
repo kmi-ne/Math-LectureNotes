@@ -1,0 +1,34 @@
+% - - - \km@newBool{#1: スイッチ名} - - -
+% 新しくスイッチを宣言し，自動でFに設定します．
+
+\NewDocumentCommand{\km@newBool}{m}{%
+  \csname newif#1\endcsname
+  \csname #1false\endcsname%
+}
+
+
+% - - - \km@setNewBool{#1: スイッチ名}+ - - -
+% 新しいスイッチの宣言と真理値設定を同時に行います．
+
+\NewDocumentCommand{\km@setNewBool}{m !t+}{%
+  \csname newif#1\endcsname
+  \IfBooleanTF{#2}{\csname #1true\endcsname}{\csname #1false\endcsname}%
+}
+
+
+% - - - \km@ifTF{#1: スイッチ名}{#2: Tのときの動作}{#3: Fのときの動作} - - -
+% - - - \km@ifT{#1: スイッチ名}{#2: Tのときの動作} - - -
+% - - - \km@ifF{#1: スイッチ名}{#2: Fのときの動作} - - -
+% スイッチの状態に応じて条件分岐します．
+
+\newcommand{\km@ifTF}[3]{\csname if#1\endcsname #2\else #3\fi}
+\newcommand{\km@ifT}[2]{\csname if#1\endcsname #2\else\fi}
+\newcommand{\km@ifF}[2]{\csname if#1\endcsname\else #2\fi}
+
+
+% - - - \km@setT{#1: スイッチ名} - - -
+% - - - \km@setF{#1: スイッチ名} - - -
+% スイッチをT/Fに切り替えます．
+
+\newcommand{\km@setT}[1]{\csname if#1true\endcsname}
+\newcommand{\km@setF}[1]{\csname if#1false\endcsname}

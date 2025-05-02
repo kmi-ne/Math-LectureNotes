@@ -1,0 +1,26 @@
+% - - - \km@setNameref{#1: \label{<ラベル>}}{#2: nameref} - - -
+% 直近の\item にラベルを付与し，同時に\nameref で参照するための名前を \item に付与します．
+\newcommand{\km@setNameref}[2]{%
+  \bgroup
+    \protected@edef\@currentlabelname{#2}%
+    #1%
+  \egroup
+}
+
+
+% - - - \Item[#1: 項目名](#2: \label{<ラベル>})"#3: nameref" - - -
+% ラベルを付与して \nameref で参照できるようにした \item ．
+% \nameref{<ラベル>} の値：
+  % #1が空，#3なし → {}
+  % #1が空，#3あり → #3
+  % #1あり，#3なし → #1
+  % #1あり，#3あり → #3
+\NewDocumentCommand{\Item}{O{} !D(){} !D""{#1}}{%
+  % description 環境でないか
+  \IfBlankTF{#1}
+    % ラベルが設定されていれば，名前を付与する
+    {\item \IfBlankF{#2}{\km@setNameref{#2}{#3}}}
+    % ラベルが設定されていれば，名前を付与する
+    % description 環境の場合，小見出しの行に \phantomsection を打っておく
+    {\item[#1] \IfBlankF{#2}{\phantomsection\km@setNameref{#2}{#3}}}%
+}
