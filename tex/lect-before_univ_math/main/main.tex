@@ -1,0 +1,85 @@
+\documentclass[
+  % lualatex,
+  % ja = standard,
+  twoside,
+  b5j,
+]{ltjsreport}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - -
+% region !オプション
+
+% 設定ファイル: draft / basic / full
+% 数式スタイル: unicode-math に渡すオプション
+% 定理環境スタイル: min / color-min / color-basic
+\usepackage[
+  設定ファイル = draft,
+  % 索引を出力,
+  % グロッサリーを出力,
+  % 参考文献を出力,
+  数式スタイル = {sans-style=literal, bold-style=literal},
+  定理環境スタイル = color-min,
+  プレタイトル = 速習コース,
+  タイトル = 大学で数学を学ぶ前に,
+  著者 = 鴎海,
+  日時 = 最終更新日：\today
+]{../../_cfg-global/cfg}
+
+% endregion !オプション
+% - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+\begin{document}
+
+
+% タイトルページ
+\pagenumbering{roman}
+\maketitle
+
+
+% ドキュメント構成：
+% = = = = = = =
+% 引用
+% まえがき
+% 目次
+% 本編
+% 参考文献
+% 索引
+% 記号一覧
+% = = = = = = =
+
+
+% 引用
+\input{sub/misc/quotepage.tex}
+
+
+% まえがき
+\input{sub/misc/intro.tex}
+
+
+% 目次
+\tableofcontents
+
+\cleardoublepage
+\pagenumbering{arabic}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - -
+% region !本編
+
+\input{sub/01/main.tex}
+
+% endregion !本編
+% - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+% 参考文献
+\参考文献
+
+% 索引
+\索引
+
+% 記号一覧
+\グロッサリー
+
+\end{document}
