@@ -1,0 +1,31 @@
+% 真理値
+\usepackage{../../_pkg/mybool}
+
+
+\DeclareKeys[cfg]{
+  設定ファイル.store = \km@設定ファイル,
+  索引を出力.if = 索引を出力,
+  グロッサリーを出力.if = グロッサリーを出力,
+  参考文献を出力.if = 参考文献を出力,
+  数式スタイル.store = \km@数式スタイル,
+  定理環境スタイル.store = \km@定理環境スタイル,
+  プレタイトル.store = \km@プレタイトル,
+  タイトル.store = \km@タイトル,
+  サブタイトル.store = \km@サブタイトル,
+  著者.store = \km@著者,
+  日時.store = \km@日時
+}
+
+\SetKeys[cfg]{
+  設定ファイル = draft,
+  定理環境スタイル = color-min
+}
+
+\ProcessKeyOptions[cfg]
+
+
+% 設定ファイル読み込み
+\usepackage{../../_cfg-global/cfg-\km@設定ファイル}
+
+% 各プロジェクトのマクロ
+\usepackage{../_cfg-local/macro}
