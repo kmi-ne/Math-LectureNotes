@@ -1,0 +1,42 @@
+\usepackage[skins, breakable]{tcolorbox}
+
+% 番号用にダミーの環境を定義します．
+\newtcolorbox[auto counter, number within=chapter]{km@none}{}
+
+% \defitem{#1: 環境名}{#2: タイプ}{#3: 色}{#4: 下側コンテンツのタイトル}
+\newcommand{\defitem}[4]{
+  \crefname{item-#1}{#2}{#2}
+  % \begin{#1}(##1: \label{<ラベル>})"##2: nameref"[##3: サブタイトル]
+  %   ...
+  % \end{#1}
+  \NewTColorBox[use counter from=km@none, crefname={#2}{#2}] {#1} {!D(){} !D""{} !O{}} {
+    empty,
+    enhanced, breakable,
+    tile,
+    colback = #3!10!white, skin = bicolor, colbacklower = white,
+    borderline west = {4pt}{0pt}{#3},
+    detach title,
+    fonttitle = \sf, coltitle = #3,
+    title = {#2\thetcbcounter\IfBlankF{##3}{（##3）}},
+    phantom = {##1},
+    nameref = {##2},
+    before upper = {\crefalias{thmlisti}{item-#1}\tcbtitle\quad},
+    before lower = {\IfBlankF{#4}{\textsf{#4}\quad}}
+  }
+}
+
+\defitem{rgl}{規約}{青}{例}
+\defitem{mdfn}{メタ定義}{青}{例}
+\defitem{dfn}{定義}{青}{例}
+
+\defitem{asm}{前提}{赤}
+
+\defitem{fct}{事実}{緑}{論証}
+\defitem{mthm}{メタ定理}{緑}{メタ証明}
+\defitem{thm}{定理}{緑}{証明}
+\defitem{lem}{補題}{緑}{証明}
+\defitem{prp}{命題}{緑}{証明}
+\defitem{cor}{系}{緑}{証明}
+
+\defitem{cnv}{約束}{灰}{例}
+\defitem{ntt}{記法}{灰}{例}
